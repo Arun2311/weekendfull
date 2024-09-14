@@ -1,12 +1,12 @@
 const express =  require("express")
 
 const app = express()
-
+const connectDb =  require("./src/config/dbconfig")
 app.use(express.json())
 
 
 const port = 7000
-
+connectDb()
 
 app.get("/" ,(req,res)=>{
     res.send("Aralam")
