@@ -13,14 +13,22 @@ const MyComponent = () => {
     
   };
 
+
+  const handle = ()=>{
+    localStorage.setItem("token" ,"sdsadsajkdyt32dsaygsajdgjsagjdsahdjsdsyu")
+  }
+
   return (
     <div>
 
         <h1>Arun</h1>
-      <Document  onPassword={handlePassword}>
+      {/* <Document  onPassword={handlePassword}>
         <Page pageNumber={1} />
-      </Document>
-      {isPasswordProtected && <p>This PDF is password protected.</p>}
+      </Document> */}
+      {/* {isPasswordProtected && <p>This PDF is password protected.</p>} */}
+
+
+      <button onClick={handle}>stor</button>
     </div>
   );
 };
