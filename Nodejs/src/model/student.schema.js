@@ -18,6 +18,13 @@ const StudentSchema = mongoose.Schema(
         password: {
             required: true,
             type: String
+        },
+        deletedstatus :{
+
+            // 0 - not deleted 1, deleted
+            required: true,
+            type: Number,
+            default:0
         }
     }
     ,{

@@ -128,7 +128,10 @@ app.get("/getallstudent", async (req, res, nxt) => {
     try {
 
 
-        let data = await StudentModel.find().select("name email")
+        let query  = 
+          {deletedstatus :{$ne :1}}
+        
+        let data = await StudentModel.find(query).select("name email")
 
         res.send({
             data: data,
@@ -172,6 +175,31 @@ app.get("/getbyid", async (req, res, nxt) => {
 
 })
 
+
+
+app.delete("/delete",async (req, res, nxt)=>{
+
+    try{
+
+
+        let id =  req.query.id
+
+        let data =   await StudentModel.findById(id)
+
+        data.deletedstatus = 1
+        await data.save()
+
+
+
+        // hard delete
+        // let data =  StudentModel.findByIdDelete(id)
+
+
+    }catch(er){
+
+    }
+
+})
 
 
 
