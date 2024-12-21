@@ -1,205 +1,251 @@
-const express = require("express")
-const StudentModel = require("./src/model/student.schema")
-const app = express()
-const connectDb = require("./src/config/dbconfig")
-app.use(express.json())
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+// const express = require("express")
+// const StudentModel = require("./src/model/student.schema")
+// const app = express()
+// const connectDb = require("./src/config/dbconfig")
+// app.use(express.json())
+// const bcrypt = require("bcryptjs")
+// const jwt = require("jsonwebtoken")
 
-const port = 7000
-connectDb()
+// const port = 7000
+// connectDb()
 
-app.get("/", (req, res) => {
-    res.send("Aralam")
-})
+// app.get("/", (req, res) => {
+//     res.send("Aralam")
+// })
 
 
+// const authMiddleware = (req, res, nxt) => {
 
-app.post("/register", async (req, res, nxt) => {
+//     const authheader = req.headers.authorization
 
-    try {
+//     if (!authheader) {
+//         return res.status(401).json({ message: "authheader missing" })
+//     }
 
-        let body = req.body
+//     let tokennn = req.headers.authorization.split(" ")
 
-        const salt = await bcrypt.genSalt(10)
+//     if (!tokennn[1]) {
+//         return res.status(401).json({ message: "token  missing" })
 
-        const hashpassword = await bcrypt.hash(body.password, salt)
+//     }
 
-        body.password = hashpassword
+//     jwt.verify(tokennn[1], "weekendnodejs", (err, decode) => {
 
-        let stu = new StudentModel(body)
-        await stu.save()
+//         if (err) {
+//             return res.status(401).json({ message: "token is expried or invalid" })
 
+//         }
 
-        let da = StudentModel.findOne({ email: body.email })
+//         req.user = decode
 
-        res.send({
-            status: 400,
-            message: "data saved",
-        })
+//         nxt()
+//     })
 
-        res.status(500)
 
-    } catch (err) {
-        nxt(err)
-    }
 
+// }
 
-})
 
-app.post("/login", async (req, res, nxt) => {
 
-    try {
+// app.post("/register", async (req, res, nxt) => {
 
+//     try {
 
-        let { email, password } = req.body
+//         let body = req.body
 
-        let studentdata = await StudentModel.findOne({ email: email })
+//         const salt = await bcrypt.genSalt(10)
 
+//         const hashpassword = await bcrypt.hash(body.password, salt)
 
+//         body.password = hashpassword
 
-        console.log(studentdata);
+//         let stu = new StudentModel(body)
+//         await stu.save()
 
-        if (!studentdata) {
-            res.send({
-                status: 400,
-                msg: "invalid"
-            })
-        }
 
+//         let da = StudentModel.findOne({ email: body.email })
 
+//         res.send({
+//             status: 400,
+//             message: "data saved",
+//         })
 
-        const invalidpass = await bcrypt.compare(password, studentdata.password)
+//         res.status(500)
 
-        if (!invalidpass) {
+//     } catch (err) {
+//         nxt(err)
+//     }
 
-            return res.send({
-                status: 400,
-                msg: "invalid username or password"
-            })
 
-        }
+// })
 
 
-        const token = jwt.sign({ userid: studentdata._id }, "weekendnodejs", {
-            expiresIn: "1d"
-        })
 
+// app.post("/login", async (req, res, nxt) => {
 
+//     try {
 
-        res.send({
-            msg: "sucess logined",
-            // data: studentdata,
-            token: token
-        })
 
+//         let { email, password } = req.body
 
+//         let studentdata = await StudentModel.findOne({ email: email })
 
 
 
+//         console.log(studentdata);
 
+//         if (!studentdata) {
+//             res.send({
+//                 status: 400,
+//                 msg: "invalid"
+//             })
+//         }
 
 
 
+//         const invalidpass = await bcrypt.compare(password, studentdata.password)
 
+//         if (!invalidpass) {
 
+//             return res.send({
+//                 status: 400,
+//                 msg: "invalid username or password"
+//             })
 
+//         }
 
-    } catch (err) {
-        console.log(err);
-        nxt(err)
 
-    }
+//         const token = jwt.sign({ userid: studentdata._id }, "weekendnodejs", {
+//             expiresIn: "1d"
+//         })
 
-})
 
 
+//         res.send({
+//             msg: "sucess logined",
+//             // data: studentdata,
+//             token: token
+//         })
 
 
 
 
 
-// admin
 
 
-app.get("/getallstudent", async (req, res, nxt) => {
 
 
-    try {
 
 
-        let query  = 
-          {deletedstatus :{$ne :1}}
+
+
+//     } catch (err) {
+//         console.log(err);
+//         nxt(err)
+
+//     }
+
+// })
+
+
+
+
+
+
+
+
+// // admin
+
+
+// app.get("/getallstudent",authMiddleware, async (req, res, nxt) => {
+
+
+//     try {
+
+
+//         let query =
+//             { deletedstatus: { $ne: 1 } }
+
+//         let data = await StudentModel.find(query).select("name email")
+
+//         res.send({
+//             data: data,
+
+//         })
+
+
+//     } catch (err) {
+//         nxt(err)
+//     }
+
+// })
+
+
+
+
+// app.get("/getbyid", authMiddleware, async (req, res, nxt) => {
+
+//     try {
+
+//         console.log(req.user.userid);
         
-        let data = await StudentModel.find(query).select("name email")
 
-        res.send({
-            data: data,
+//         // console.log(req.headers.authorization);
 
-        })
-
-
-    } catch (err) {
-        nxt(err)
-    }
-
-})
+//         // let tokennn = req.headers.authorization.split(" ")
 
 
 
+//         // let decode = jwt.verify(tokennn[1], "weekendnodejs")
 
-app.get("/getbyid", async (req, res, nxt) => {
+//         // console.log(decode);
+//         // console.log(req.quer/y.id);
 
-    try {
+//         // let Studentdata = await StudentModel.findById(decode.userid).select("-password")
 
-        console.log(req.headers.authorization);
+//         // res.send({
+//         //     data: Studentdata
+//         // })
 
-        let tokennn = req.headers.authorization.split(" ")
+//     } catch (err) {
+//           nxt(err)
+//     }
 
-
-
-        let decode = jwt.verify(tokennn[1], "weekendnodejs")
-
-        console.log(decode);
-        // console.log(req.quer/y.id);
-
-        let Studentdata = await StudentModel.findById(decode.userid).select("-password")
-
-        res.send({
-            data: Studentdata
-        })
-
-    } catch (err) {
-
-    }
-
-})
+// })
 
 
 
-app.delete("/delete",async (req, res, nxt)=>{
+// app.delete("/delete", async (req, res, nxt) => {
 
-    try{
-
-
-        let id =  req.query.id
-
-        let data =   await StudentModel.findById(id)
-
-        data.deletedstatus = 1
-        await data.save()
+//     try {
 
 
+//         let id = req.query.id
 
-        // hard delete
-        // let data =  StudentModel.findByIdDelete(id)
+//         let data = await StudentModel.findById(id)
+
+//         data.deletedstatus = 1
+//         await data.save()
 
 
-    }catch(er){
 
-    }
+//         // hard delete
+//         // let data =  StudentModel.findByIdDelete(id)
 
-})
+
+//     } catch (er) {
+
+//     }
+
+// })
+
+
+
+
+// app.listen(port, (req, res) => {
+//     console.log("server started at", port);
+
+// })
 
 
 
@@ -208,19 +254,4 @@ app.delete("/delete",async (req, res, nxt)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-app.listen(port, (req, res) => {
-    console.log("server started at", port);
-
-})
 
