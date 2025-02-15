@@ -28,8 +28,6 @@
 //     this.setState({ ishide: !this.state.ishide });
 //   };
 
-
-
 //   render() {
 //     return (
 //       <div>
@@ -42,20 +40,20 @@
 //         {/* <FormWithReact/> */}
 
 //         {/* <ApiCall/> */}
-//         {/* 
+//         {/*
 // <div className="m-4">
 
 //         <Link to="/">
 //         <span className="m-2">Home</span>
-         
+
 //          </Link>
-//         <Link to="/form" > 
+//         <Link to="/form" >
 //         <span className="m-2">form</span>
 //         </Link>
 
-//         <Link   to="/select" > 
+//         <Link   to="/select" >
 //         <span className="m-2">select</span>
-        
+
 //         </Link>
 //         </div> */}
 
@@ -70,7 +68,7 @@
 
 //         {/* <CartProvider> */}
 
-//         {/* <CounterContext /> 
+//         {/* <CounterContext />
 //         <TestComp/> */}
 // {/* <CounterRedux/> */}
 
@@ -87,50 +85,69 @@
 //   }
 // }
 
-
-import { Suspense } from "react"
-import React ,{ useState } from 'react'
+import { Suspense } from "react";
+import React, { useState } from "react";
 import ApiCall from "./Component/FunComp/ApiCall";
 import ApiCallTwo from "./Component/FunComp/ApiCallTwo";
 import MyComponent from "./Component/FunComp/ReactPdf";
+import CompHoc1 from "./Component/FunComp/CompHoc1";
+
+import WithDataFetch from "./Component/FunComp/HOC/WithDataFetch";
+import CompHoc2 from "./Component/FunComp/CompHoc2";
 
 // const LazyComponent =  React.lazy(()=> import("./Component/FunComp/TestCode"))
 
+const ApiU = "https://jsonplaceholder.typicode.com/todos"
+
+const EnanchedComp = WithDataFetch(CompHoc1,ApiU)
+
+
+const EnachComp2 = WithDataFetch(CompHoc2 , "next api")
+
 export default function App() {
-
   // const [Comp ,setComp] = useState(null)
-
-
 
   // const handlenavclick = async() =>{
 
-  //   const comingComp = await 
+  //   const comingComp = await
   //   setComp(()=>comingComp.default)
-
 
   // }
 
   return (
     <div>
-{/* 
+      {/* 
 <Suspense fallback={<div>Loading</div>}>
 <LazyComponent/>
 
 
 </Suspense> */}
+<h1>HOC</h1>
+
+HIGHER ORDER COMPONENT(HOC)
+
+REACT DESIGN PATTERN 
+
+{/* REUSABLE OF COMPOENENT LOGIC API 10 7 COMPONENT API */}
 
 
-        {/* <ApiCallTwo/> */}
+HOC IS FUNCTION 
 
-<MyComponent/>
+{/* DOOR > HUMAN > SOME POWERS 
+
+HOC FUNC > NORMAL COMPOENENT >  SOME FEATURES */}
+<EnanchedComp/>
+
+{/* <CompHoc1/> */}
 
 
+      {/* <ApiCallTwo/> */}
 
-
+      {/* <MyComponent/> */}
 
       {/* <TestCode/> */}
-{/* {Comp && <Comp />} */}
+      {/* {Comp && <Comp />} */}
       {/* <button onClick={handlenavclick}>about</button> */}
     </div>
-  )
+  );
 }
